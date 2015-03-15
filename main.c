@@ -3,6 +3,10 @@
 #include <math.h>
 #include "matrix.h"
 
+#define MATRIX_DISTANCE_TOLERANCE 0.0001
+
+/*TODO: Read the matrix from a file */
+
 /* Add function signatures here */
 float matrix_distance(Matrix*, Matrix*);
 Matrix* create_board(void);
@@ -54,7 +58,7 @@ int main(int argc, char **argv) {
     printf("-----------------------------------\n\n");
 
     printf("Matrix distance:  %5.5f \n\n", matrix_distance(current_board, old_board));
-  } while (matrix_distance(current_board, old_board) > 0.00001);
+  } while (matrix_distance(current_board, old_board) >= MATRIX_DISTANCE_TOLERANCE);
 
   matrix_free(current_board);
   matrix_free(old_board);
