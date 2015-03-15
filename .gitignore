@@ -1,0 +1,5 @@
+*.out
+pollution
+*.o
+*dSYM
+main
