@@ -21,12 +21,7 @@ int main(int argc, char **argv) {
     }
   }
 
-  for (i = 0; i < mat->number_of_rows; i++) {
-    for (j = 0; j < mat->number_of_columns; j++) {
-      printf("%5.2f ", mat->v[i * mat->number_of_columns + j]);
-    }
-    printf("\n");
-  }
+  matrix_display(mat);
 
   matrix_free(mat);
 
