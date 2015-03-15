@@ -6,6 +6,8 @@
 /* Add function signatures here */
 float matrix_distance(Matrix*, Matrix*);
 Matrix* create_board(void);
+
+void copy_board(Matrix* , Matrix*);
 float make_operation(Matrix*, int, int);
 
 
@@ -19,25 +21,43 @@ float bottom(Matrix*, int, int);
 
 
 int main(int argc, char **argv) {
-  Matrix* mat;
-  int n = 5;
-  int m = 4;
+  Matrix* current_board;
+  Matrix* old_board;
+
   int i;
   int j;
-  float random_value;
+  int counter = 0;
   
-  mat = matrix_create(n, m);
+  current_board = create_board();
 
-  for (i = 0; i < mat->number_of_rows; i++) {
-    for (j = 0; j < mat->number_of_columns; j++) {
-      random_value = (rand() % 20) * 2.0;
-      matrix_set(mat, i, j, random_value);
+  old_board = (Matrix *) malloc(sizeof(Matrix));
+
+  old_board = matrix_create(current_board->number_of_rows, current_board->number_of_columns);
+
+  do {
+    copy_board(current_board, old_board);
+
+    for (i = 0; i < current_board->number_of_rows; i++) {
+      for (j = 0; j < current_board->number_of_columns; j++) {
+        matrix_set(current_board, i, j, make_operation(current_board, i, j));
+      }
     }
-  }
+    counter++;
 
-  matrix_display(mat);
+    printf("Iteration %d\n", counter);
+    printf("--------- Current Board ----------\n");
+    matrix_display(current_board);
+    printf("-----------------------------------\n\n");
 
-  matrix_free(mat);
+    printf("---------- Old Board -------------\n");
+    matrix_display(old_board);
+    printf("-----------------------------------\n\n");
+
+    printf("Matrix distance:  %5.5f \n\n", matrix_distance(current_board, old_board));
+  } while (matrix_distance(current_board, old_board) > 0.00001);
+
+  matrix_free(current_board);
+  matrix_free(old_board);
 
   return 0;
 }
@@ -52,7 +72,7 @@ float matrix_distance(Matrix* mat1, Matrix* mat2) {
 
   for (i = 0; i < mat1->number_of_rows; i++) {
     for (j = 0; j < mat1->number_of_columns; j++) {
-      current_diff = abs(matrix_get(mat1, i, j) - matrix_get(mat2, i, j));
+      current_diff = fabs(matrix_get(mat1, i, j) - matrix_get(mat2, i, j));
       if (current_diff > max) {
         max = current_diff;
       }
@@ -180,4 +200,15 @@ float bottom(Matrix* mat, int i, int j) {
     return 0;
   }
   return matrix_get(mat, i + 1, j);
+}
+
+void copy_board(Matrix* matrix_origin , Matrix* matrix_destination) {
+  int i;
+  int j;
+
+  for (i = 0; i < matrix_origin->number_of_rows; i++) {
+    for (j = 0; j < matrix_origin->number_of_columns; j++) {
+      matrix_set(matrix_destination, i, j, matrix_get(matrix_origin, i, j));
+    }
+  }
 }

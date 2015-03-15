@@ -43,9 +43,10 @@ void matrix_display(Matrix* mat) {
   int i;
   int j;
 
+
   for (i = 0; i < mat->number_of_rows; i++) {
     for (j = 0; j < mat->number_of_columns; j++) {
-      printf("%5.2f ", matrix_get(mat, i, j));
+      printf("%5.5f ", matrix_get(mat, i, j));
     }
     printf("\n");
   }
