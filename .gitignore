@@ -3,3 +3,4 @@ pollution
 *.o
 *dSYM
 main
+.DS_Store

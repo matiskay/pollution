@@ -4,7 +4,19 @@
 #include "matrix.h"
 
 /* Add function signatures here */
-float matrix_distance(Matrix* mat1, Matrix* mat2);
+float matrix_distance(Matrix*, Matrix*);
+Matrix* create_board(void);
+float make_operation(Matrix*, int, int);
+
+
+float left(Matrix*, int, int);
+
+float right(Matrix*, int, int);
+
+float top(Matrix*, int, int);
+
+float bottom(Matrix*, int, int);
+
 
 int main(int argc, char **argv) {
   Matrix* mat;
@@ -33,6 +45,8 @@ int main(int argc, char **argv) {
 
 float matrix_distance(Matrix* mat1, Matrix* mat2) {
   /* Check the dimension of the matrices */
+  int i;
+  int j;
   float max = 0;
   float current_diff;
 
@@ -46,4 +60,124 @@ float matrix_distance(Matrix* mat1, Matrix* mat2) {
   }
 
   return max;
+}
+
+
+Matrix* create_board() {
+  int i;
+  int j;
+
+  Matrix* mat;
+  Matrix* board;
+
+  mat = matrix_create(4, 5);
+  board = matrix_create(4, 5);
+
+  /*
+   *  0 0 0 0 0
+   *  0 1 1 1 0
+   *  0 0 2 1 0
+   *  0 0 0 0 0
+   */
+  matrix_set(mat, 0, 0, 0);
+  matrix_set(mat, 0, 1, 0);
+  matrix_set(mat, 0, 2, 0);
+  matrix_set(mat, 0, 3, 0);
+  matrix_set(mat, 0, 4, 0);
+
+  matrix_set(mat, 1, 0, 0);
+  matrix_set(mat, 1, 1, 1);
+  matrix_set(mat, 1, 2, 1);
+  matrix_set(mat, 1, 3, 1);
+  matrix_set(mat, 1, 4, 0);
+
+  matrix_set(mat, 2, 0, 0);
+  matrix_set(mat, 2, 1, 0);
+  matrix_set(mat, 2, 2, 2);
+  matrix_set(mat, 2, 3, 1);
+  matrix_set(mat, 2, 4, 0);
+
+  matrix_set(mat, 3, 0, 0);
+  matrix_set(mat, 3, 1, 0);
+  matrix_set(mat, 3, 2, 0);
+  matrix_set(mat, 3, 3, 0);
+  matrix_set(mat, 3, 4, 0);
+
+  /*
+   *  N = 100
+   *
+   *  0 0 0 0 0
+   *  0 0 0 0 0
+   *  0 0 N 0 0
+   *  0 0 0 0 0
+   */
+
+  for (i = 0; i < mat->number_of_rows; i++) {
+    for (j = 0; j < mat->number_of_columns; j++) {
+      if (matrix_get(mat, i, j) == 2) {
+        matrix_set(board, i, j, 100);
+      } else {
+        matrix_set(board, i, j, 0);
+      }
+    }
+  }
+
+  return board;
+}
+
+float make_operation(Matrix* mat, int i, int j) {
+
+  /**
+   * Direction's diagram
+   *
+   *                i - 1, j
+   *    i, j - 1 <-   i,j   -> i, j + 1
+   *                i + 1, j
+   */
+
+  /**
+   * Extreme cases:
+   * 5 x 9
+   * +---+---+---+---+---+---+---+---+---+
+   * | X | O | O | O | X | O | O | O | X |
+   * +---+---+---+---+---+---+---+---+---+
+   * | O |   |   |   |   |   |   |   | O |
+   * +---+---+---+---+---+---+---+---+---+
+   * | X |   |   |   |   |   |   |   | O |
+   * +---+---+---+---+---+---+---+---+---+
+   * | O |   |   |   |   |   |   |   | O |
+   * +---+---+---+---+---+---+---+---+---+
+   * | X | O | O | O | O | X | O | O | X |
+   * +---+---+---+---+---+---+---+---+---+
+   *
+   * */
+  return (left(mat, i, j) + top(mat, i, j) + right(mat, i, j) + bottom(mat, i, j)) / 4;
+}
+
+float left(Matrix* mat, int i, int j) {
+  if (j == 0) {
+    return 0;
+  }
+  return matrix_get(mat, i, j - 1);
+}
+
+float right(Matrix* mat, int i, int j) {
+  if (j == mat->number_of_columns - 1) {
+    return 0;
+  }
+  return matrix_get(mat, i, j + 1);
+}
+
+float top(Matrix* mat, int i, int j) {
+  if (i == 0) {
+    return 0;
+  }
+  return matrix_get(mat, i - 1, j);
+}
+
+float bottom(Matrix* mat, int i, int j) {
+  if (i == mat->number_of_rows - 1) {
+    return 0;
+  }
+  return matrix_get(mat, i + 1, j);
 }
