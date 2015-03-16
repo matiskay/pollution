@@ -4,16 +4,22 @@
 #include "matrix.h"
 
 #define MATRIX_DISTANCE_TOLERANCE 0.0001
+#define BOMB_MARK 2
+#define POLLUTION_MARK 100
 
-/*TODO: Read the matrix from a file */
+/* TODO: Read the matrix from a file */
+/* TODO: Add tests for the functions */ 
+/* TODO: Add summary of the process. Adding execution time and the amount of memory required */ 
+/* TODO: Add a graph of how the max distance is decreasing */
+/* TODO: Find a function to inspect the code for good practices. */
 
 /* Add function signatures here */
 float matrix_distance(Matrix*, Matrix*);
 Matrix* create_board(void);
 
 void copy_board(Matrix* , Matrix*);
-float make_operation(Matrix*, int, int);
 
+float make_operation(Matrix*, int, int);
 
 float left(Matrix*, int, int);
 
@@ -22,6 +28,8 @@ float right(Matrix*, int, int);
 float top(Matrix*, int, int);
 
 float bottom(Matrix*, int, int);
+
+void print_board(char*, Matrix*);
 
 
 int main(int argc, char **argv) {
@@ -46,18 +54,15 @@ int main(int argc, char **argv) {
         matrix_set(current_board, i, j, make_operation(current_board, i, j));
       }
     }
+
     counter++;
 
-    printf("Iteration %d\n", counter);
-    printf("--------- Current Board ----------\n");
-    matrix_display(current_board);
-    printf("-----------------------------------\n\n");
+    printf("Iteration number: %d\n\n", counter);
 
-    printf("---------- Old Board -------------\n");
-    matrix_display(old_board);
-    printf("-----------------------------------\n\n");
+    print_board("Current Board", current_board);
+    print_board("Old Board", old_board);
 
-    printf("Matrix distance:  %5.5f \n\n", matrix_distance(current_board, old_board));
+    printf("   Matrix distance:  %5.5f \n\n", matrix_distance(current_board, old_board));
   } while (matrix_distance(current_board, old_board) >= MATRIX_DISTANCE_TOLERANCE);
 
   matrix_free(current_board);
@@ -66,6 +71,11 @@ int main(int argc, char **argv) {
   return 0;
 }
 
+void print_board(char* title, Matrix* board) {
+    printf("   ----------------- %s -----------------------\n", title);
+    matrix_display(board);
+    printf("   ---------------------------------------------------\n\n");
+}
 
 float matrix_distance(Matrix* mat1, Matrix* mat2) {
   /* Check the dimension of the matrices */
@@ -85,7 +95,6 @@ float matrix_distance(Matrix* mat1, Matrix* mat2) {
 
   return max;
 }
-
 
 Matrix* create_board() {
   int i;
@@ -138,8 +147,8 @@ Matrix* create_board() {
 
   for (i = 0; i < mat->number_of_rows; i++) {
     for (j = 0; j < mat->number_of_columns; j++) {
-      if (matrix_get(mat, i, j) == 2) {
-        matrix_set(board, i, j, 100);
+      if (matrix_get(mat, i, j) == BOMB_MARK) {
+        matrix_set(board, i, j, POLLUTION_MARK);
       } else {
         matrix_set(board, i, j, 0);
       }
@@ -149,7 +158,7 @@ Matrix* create_board() {
   return board;
 }
 
-float make_operation(Matrix* mat, int i, int j) {
+float make_operation(Matrix* mat, int row_index, int column_index) {
 
   /**
    * Direction's diagram
@@ -175,35 +184,42 @@ float make_operation(Matrix* mat, int i, int j) {
    * +---+---+---+---+---+---+---+---+---+
    *
    * */
-  return (left(mat, i, j) + top(mat, i, j) + right(mat, i, j) + bottom(mat, i, j)) / 4;
+  return (left(mat, row_index, column_index)
+      + top(mat, row_index, column_index)
+      + right(mat, row_index, column_index)
+      + bottom(mat, row_index, column_index)) / 4;
 }
 
-float left(Matrix* mat, int i, int j) {
-  if (j == 0) {
+float left(Matrix* mat, int row_index, int column_index) {
+  if (column_index == 0) {
     return 0;
   }
-  return matrix_get(mat, i, j - 1);
+
+  return matrix_get(mat, row_index, column_index - 1);
 }
 
-float right(Matrix* mat, int i, int j) {
-  if (j == mat->number_of_columns - 1) {
+float right(Matrix* mat, int row_index, int column_index) {
+  if (column_index == mat->number_of_columns - 1) {
     return 0;
   }
-  return matrix_get(mat, i, j + 1);
+
+  return matrix_get(mat, row_index, column_index + 1);
 }
 
-float top(Matrix* mat, int i, int j) {
-  if (i == 0) {
+float top(Matrix* mat, int row_index, int column_index) {
+  if (row_index == 0) {
     return 0;
   }
-  return matrix_get(mat, i - 1, j);
+
+  return matrix_get(mat, row_index - 1, column_index);
 }
 
-float bottom(Matrix* mat, int i, int j) {
-  if (i == mat->number_of_rows - 1) {
+float bottom(Matrix* mat, int row_index, int column_index) {
+  if (row_index == mat->number_of_rows - 1) {
     return 0;
   }
-  return matrix_get(mat, i + 1, j);
+
+  return matrix_get(mat, row_index + 1, column_index);
 }
 
 void copy_board(Matrix* matrix_origin , Matrix* matrix_destination) {

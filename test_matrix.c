@@ -14,6 +14,74 @@
 
 int tests_run = 0;
 
+/* TODO: Test the number of memory that we have to allocate */
+/* TODO: Add a test to check if v is created or not */
+static char * test_matrix_create() {
+  Matrix* mat;
+
+  mat = matrix_create(3, 4);
+
+  /*
+   * +---+---+---+---+
+   * | 1 | 2 | 5 | 0 |
+   * +---+---+---+---+
+   * | 2 | 1 | 4 | 1 |
+   * +---+---+---+---+
+   * | 0 | 0 | 1 | 0 |
+   * +---+---+---+---+
+   */
+
+  mu_assert("error, the number of rows is not equal to 3", mat->number_of_rows == 3);
+  mu_assert("error, the number of columns is not equal to 4", mat->number_of_columns == 4);
+  return 0;
+}
+
+static char * test_matrix_number_of_columns() {
+  Matrix* mat;
+
+  mat = matrix_create(3, 4);
+  mu_assert("error, the number of rows is not equal to 4", matrix_number_of_columns(mat) == 4);
+  return 0;
+}
+
+static char * test_matrix_number_of_rows() {
+  Matrix* mat;
+
+  mat = matrix_create(3, 4);
+  mu_assert("error, the number of rows is not equal to 3", matrix_number_of_rows(mat) == 3);
+  return 0;
+}
+
+/* Set and get are related */
+static char * test_matrix_get() {
+  Matrix* mat;
+
+  mat = matrix_create(3, 4);
+
+  matrix_set(mat, 0, 0, 1);
+  matrix_set(mat, 0, 1, 2);
+  matrix_set(mat, 0, 2, 5);
+  matrix_set(mat, 0, 3, 0);
+
+  matrix_set(mat, 1, 0, 2);
+  matrix_set(mat, 1, 1, 1);
+  matrix_set(mat, 1, 2, 4);
+  matrix_set(mat, 1, 3, 1);
+
+  matrix_set(mat, 2, 0, 0);
+  matrix_set(mat, 2, 1, 0);
+  matrix_set(mat, 2, 2, 1);
+  matrix_set(mat, 2, 3, 0);
+
+  mu_assert("error, A[0, 0] is not equal to 1", matrix_get(mat, 0, 0) == 1);
+  mu_assert("error, A[1, 1] is not equal to 1", matrix_get(mat, 1, 1) == 1);
+  mu_assert("error, A[1, 2] is not equal to 4", matrix_get(mat, 1, 2) == 4);
+  mu_assert("error, A[2, 3] is not equal to 1", matrix_get(mat, 2, 3) == 0);
+  mu_assert("error, A[0, 2] is not equal to 5", matrix_get(mat, 0, 2) == 5);
+  return 0;
+}
+
+
 static char * test_unit() {
   mu_assert("error, test_unit 1 != 1", 1 == 1);
   return 0;
@@ -21,6 +89,10 @@ static char * test_unit() {
 
 static char * all_tests() {
   mu_run_test(test_unit);
+  mu_run_test(test_matrix_create);
+  mu_run_test(test_matrix_get);
+  mu_run_test(test_matrix_number_of_rows);
+  mu_run_test(test_matrix_number_of_columns);
   return 0;
 }
 

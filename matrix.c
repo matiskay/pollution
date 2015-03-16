@@ -2,6 +2,9 @@
 #include <stdio.h>
 #include "matrix.h"
 
+/* TODO: Add function to check the equality of the matrices. */
+
+/* TODO: How to disable the memory? to test the function where there is not memory. */
 Matrix* matrix_create(int n, int m) {
   Matrix* mat = (Matrix *) malloc(sizeof(Matrix));
 
@@ -18,6 +21,7 @@ Matrix* matrix_create(int n, int m) {
   return mat;
 }
 
+/* TODO: How to test matrix free */
 void matrix_free(Matrix* mat) {
   free(mat->v);
   free(mat);
@@ -43,10 +47,9 @@ void matrix_display(Matrix* mat) {
   int i;
   int j;
 
-
   for (i = 0; i < mat->number_of_rows; i++) {
     for (j = 0; j < mat->number_of_columns; j++) {
-      printf("%5.5f ", matrix_get(mat, i, j));
+      printf("   %5.5f ", matrix_get(mat, i, j));
     }
     printf("\n");
   }

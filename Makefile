@@ -3,9 +3,11 @@ all:
 	 gcc -c main.c
 	 gcc -o pollution matrix.o main.o
 
-test_matrix:
-	 gcc test_matrix.c -o test_matrix.out
-	 ./test_matrix.out
+test_matrix: clean
+	 gcc -c matrix.c
+	 gcc -c test_matrix.c
+	 gcc -o test_matrix matrix.o test_matrix.c
+	 ./test_matrix
 
 test:	 test_matrix
 
@@ -14,6 +16,7 @@ clean:
 	 rm *.o || echo "No *.o files"
 	 rm -rf *.dSYM || echo "No *.dSYM folders"
 	 rm pollution || echo "No file pollution"
+	 rm test_matrix || echo "No file test_matrix"
 
 run:
 	 gcc -c matrix.c
