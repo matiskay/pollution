@@ -22,3 +22,4 @@ int matrix_number_of_rows(Matrix* mat);
 int matrix_number_of_columns(Matrix* mat);
 
 void matrix_display(Matrix* mat);
+void matrix_display_integers(Matrix* mat);

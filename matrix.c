@@ -54,3 +54,15 @@ void matrix_display(Matrix* mat) {
     printf("\n");
   }
 }
+
+void matrix_display_integers(Matrix* mat) {
+  int i;
+  int j;
+
+  for (i = 0; i < mat->number_of_rows; i++) {
+    for (j = 0; j < mat->number_of_columns; j++) {
+      printf("   %d ", (int) matrix_get(mat, i, j));
+    }
+    printf("\n");
+  }
+}
