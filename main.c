@@ -80,8 +80,8 @@ int main(int argc, char **argv) {
     print_board("Old Board", old_board);
 
     printf("   Matrix distance:  %5.20f \n\n", matrix_distance(current_board, old_board));
-    printf("   Maximun:  %5.20f \n\n", matrix_maximun_value(current_board));
-    printf("   Stop Criterion:  %5.10f \n\n", (matrix_distance(current_board, old_board) / matrix_maximun_value(current_board)));
+    printf("   Maximun matrix value:  %5.20f \n\n", matrix_maximun_value(current_board));
+    printf("   (Matrix_distance / Maximun_matrix_value) --> Stop Criterion:  %5.10f \n\n", (matrix_distance(current_board, old_board) / matrix_maximun_value(current_board)));
     printf("   TOLERANCE:  %5.10f \n\n", TOLERANCE);
 
     number_of_iterations++;
