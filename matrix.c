@@ -66,3 +66,19 @@ void matrix_display_integers(Matrix* mat) {
     printf("\n");
   }
 }
+
+/* The easy way to compare is to compere the number of rows and columns */
+int matrix_equal(Matrix* mat1, Matrix* mat2) {
+  int i;
+  int j;
+
+  for (i = 0; i < mat1->number_of_rows; i++) {
+    for (j = 0; j < mat1->number_of_columns; j++) {
+      if (matrix_get(mat1, i, j) != matrix_get(mat2, i, j)) {
+        return 0;
+      }
+    }
+  }
+
+  return 1;
+}

@@ -14,6 +14,42 @@
 
 int tests_run = 0;
 
+
+static char * test_matrix_equal() {
+  Matrix* mat1;
+  Matrix* mat2;
+  
+  mat1 = matrix_create(2, 2);
+  mat2 = matrix_create(2, 2);
+
+  /*
+   * +---+---+
+   * | 1 | 2 |
+   * +---+---+
+   * | 2 | 1 |
+   * +---+---+
+   */
+
+  matrix_set(mat1, 0, 0, 1);
+  matrix_set(mat1, 0, 1, 2);
+
+  matrix_set(mat1, 1, 0, 2);
+  matrix_set(mat1, 1, 1, 1);
+
+  matrix_set(mat2, 0, 0, 1);
+  matrix_set(mat2, 0, 1, 2);
+
+  matrix_set(mat2, 1, 0, 2);
+  matrix_set(mat2, 1, 1, 1);
+
+  mu_assert("error, The Matrices are equal", matrix_equal(mat1, mat2));
+
+  matrix_set(mat2, 1, 1, 0);
+
+  mu_assert("error, The Matrices are not equal", matrix_equal(mat1, mat2) == 0);
+  return 0;
+}
+
 /* TODO: Test the number of memory that we have to allocate */
 /* TODO: Add a test to check if v is created or not */
 static char * test_matrix_create() {
@@ -93,6 +129,8 @@ static char * all_tests() {
   mu_run_test(test_matrix_get);
   mu_run_test(test_matrix_number_of_rows);
   mu_run_test(test_matrix_number_of_columns);
+  mu_run_test(test_matrix_equal);
+
   return 0;
 }
 

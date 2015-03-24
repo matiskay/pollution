@@ -1,3 +1,9 @@
+#define BOMB_MARK 2
+#define POLLUTION_MARK 100
+#define BUFFER 128
+#define ASCII_CODE_FOR_ZERO 48
+#define END_OF_LINE '\n'
+
 /* ADT: Matrix */
 /* Investigate why you need the structure here. */
 
@@ -22,4 +28,7 @@ int matrix_number_of_rows(Matrix* mat);
 int matrix_number_of_columns(Matrix* mat);
 
 void matrix_display(Matrix* mat);
+
 void matrix_display_integers(Matrix* mat);
+
+int matrix_equal(Matrix* mat1, Matrix* mat2);

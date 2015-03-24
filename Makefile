@@ -3,13 +3,21 @@ CC=gcc
 all:
 	 $(CC) -c matrix.c
 	 $(CC) -c main.c
-	 $(CC) -o pollution matrix.o main.o
+	 $(CC) -c functions.c
+	 $(CC) -o pollution matrix.o functions.o main.o
 
 test_matrix: clean
 	 $(CC) -c matrix.c
 	 $(CC) -c test_matrix.c
-	 $(CC) -o test_matrix matrix.o test_matrix.c
+	 $(CC) -o test_matrix matrix.o test_matrix.o
 	 ./test_matrix
+
+test_functions: clean
+	 $(CC) -c matrix.c
+	 $(CC) -c functions.c
+	 $(CC) -c test_functions.c
+	 $(CC) -o test_functions matrix.o functions.o test_functions.o
+	 ./test_functions
 
 test:	 test_matrix
 
@@ -22,9 +30,10 @@ clean:
 	 rm stop_criterion.dat || echo "No file stop_criterion.dat"
 
 run:
-	 $(CC) -c matrix.c
 	 $(CC) -c main.c
-	 $(CC) -o pollution matrix.o main.o
+	 $(CC) -c matrix.c
+	 $(CC) -c functions.c
+	 $(CC) -o pollution matrix.o functions.o main.o
 	 ./pollution
 
 debug:
