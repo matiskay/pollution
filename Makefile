@@ -1,12 +1,14 @@
+CC=gcc
+
 all:
-	 gcc -c matrix.c
-	 gcc -c main.c
-	 gcc -o pollution matrix.o main.o
+	 $(CC) -c matrix.c
+	 $(CC) -c main.c
+	 $(CC) -o pollution matrix.o main.o
 
 test_matrix: clean
-	 gcc -c matrix.c
-	 gcc -c test_matrix.c
-	 gcc -o test_matrix matrix.o test_matrix.c
+	 $(CC) -c matrix.c
+	 $(CC) -c test_matrix.c
+	 $(CC) -o test_matrix matrix.o test_matrix.c
 	 ./test_matrix
 
 test:	 test_matrix
@@ -17,13 +19,17 @@ clean:
 	 rm -rf *.dSYM || echo "No *.dSYM folders"
 	 rm pollution || echo "No file pollution"
 	 rm test_matrix || echo "No file test_matrix"
+	 rm stop_criterion.dat || echo "No file stop_criterion.dat"
 
 run:
-	 gcc -c matrix.c
-	 gcc -c main.c
-	 gcc -o pollution matrix.o main.o
+	 $(CC) -c matrix.c
+	 $(CC) -c main.c
+	 $(CC) -o pollution matrix.o main.o
 	 ./pollution
 
 debug:
-	gcc -g main.c -o pollution
+	$(CC) -g main.c -o pollution
 	gdb pollution
+
+image:
+	gnuplot stop_criterion.plt

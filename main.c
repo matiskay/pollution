@@ -3,13 +3,14 @@
 #include <math.h>
 #include "matrix.h"
 
-#define TOLERANCE 0.001
+#define TOLERANCE 0.1
 #define BOMB_MARK 2
 #define POLLUTION_MARK 100
-#define MAX_NUMBER_OF_ITERATIONS 600
+#define MAX_NUMBER_OF_ITERATIONS 1000
 #define BUFFER 128
 #define ASCII_CODE_FOR_ZERO 48
 #define END_OF_LINE '\n'
+#define QUIET_MODE 0
 
 /* TODO: Read the matrix from a file */
 /* TODO: Add tests for the functions */ 
@@ -24,7 +25,9 @@ float matrix_maximun_value(Matrix*);
 Matrix* create_board(Matrix*);
 Matrix* create_initial_board(void);
 
-void copy_board(Matrix* , Matrix*);
+void copy_board(Matrix*, Matrix*);
+
+float stop_criterion(Matrix*, Matrix*);
 
 float make_operation(Matrix*, Matrix*, int, int);
 
@@ -38,7 +41,13 @@ float bottom(Matrix*, int, int);
 
 void print_board(char*, Matrix*);
 
+void write_data_to_file(float);
+
+float stop_condition;
+
 Matrix* create_initial_board_from_file(void);
+
+FILE* file_stop_criterion;
 
 
 int main(int argc, char **argv) {
@@ -55,7 +64,9 @@ int main(int argc, char **argv) {
   number_of_iterations = 0;
   initial_board = create_initial_board_from_file();
 
-  print_board("Initial board", initial_board);
+  if (! QUIET_MODE) {
+    print_board("Initial board", initial_board);
+  }
   
   current_board = create_board(initial_board);
 
@@ -74,20 +85,32 @@ int main(int argc, char **argv) {
 
     counter++;
 
-    printf("Iteration number: %d\n\n", counter);
+    if (! QUIET_MODE) {
+      printf("Iteration number: %d\n\n", counter);
 
-    print_board("Current Board", current_board);
-    print_board("Old Board", old_board);
+      print_board("Current Board", current_board);
+      print_board("Old Board", old_board);
 
-    printf("   Matrix distance:  %5.20f \n\n", matrix_distance(current_board, old_board));
-    printf("   Maximun matrix value:  %5.20f \n\n", matrix_maximun_value(current_board));
-    printf("   (Matrix_distance / Maximun_matrix_value) --> Stop Criterion:  %5.10f \n\n", (matrix_distance(current_board, old_board) / matrix_maximun_value(current_board)));
-    printf("   TOLERANCE:  %5.10f \n\n", TOLERANCE);
+      printf("   Matrix distance:  %5.20f \n\n", matrix_distance(current_board, old_board));
+      printf("   Maximun matrix value:  %5.20f \n\n", matrix_maximun_value(current_board));
+      printf("   (Matrix_distance / Maximun_matrix_value) --> Stop Criterion:  %5.10f \n\n", (matrix_distance(current_board, old_board) / matrix_maximun_value(current_board)));
+      printf("   TOLERANCE:  %5.10f \n\n", TOLERANCE);
+    }
 
     number_of_iterations++;
 
-  } while (((matrix_distance(current_board, old_board) / matrix_maximun_value(current_board)) >= TOLERANCE) &&
-    (number_of_iterations < MAX_NUMBER_OF_ITERATIONS));
+    /*
+  } while ((stop_criterion(current_board, old_board) >= TOLERANCE) &&
+    (number_of_iterations >= MAX_NUMBER_OF_ITERATIONS));
+    */
+    /*
+  } while (number_of_iterations < MAX_NUMBER_OF_ITERATIONS);
+  */
+  stop_condition = stop_criterion(current_board, old_board);
+
+  write_data_to_file(stop_condition);
+
+  } while ((stop_condition >= TOLERANCE) && (number_of_iterations < MAX_NUMBER_OF_ITERATIONS));
 
   matrix_free(current_board);
   matrix_free(initial_board);
@@ -101,6 +124,23 @@ int main(int argc, char **argv) {
   */
 
   return 0;
+}
+
+void write_data_to_file(float data) {
+  file_stop_criterion = fopen("stop_criterion.dat", "a");
+
+  if (! file_stop_criterion) {
+    perror("There was a problem while open the file");
+    exit(1);
+  }
+
+  fprintf(file_stop_criterion, "%2.5f \n", data);
+
+  fclose(file_stop_criterion);
+}
+
+float stop_criterion(Matrix* current_board, Matrix* old_board) {
+  return matrix_distance(current_board, old_board) / matrix_maximun_value(current_board);
 }
 
 Matrix* create_initial_board_from_file() {
@@ -205,11 +245,12 @@ float matrix_distance(Matrix* mat1, Matrix* mat2) {
   float max;
   float current_diff;
 
-  max = matrix_get(mat1, 0, 0) - matrix_get(mat2, 0, 0);
+  max = fabs(matrix_get(mat1, 0, 0) - matrix_get(mat2, 0, 0));
 
   for (i = 0; i < mat1->number_of_rows; i++) {
     for (j = 0; j < mat1->number_of_columns; j++) {
-      current_diff = matrix_get(mat1, i, j) - matrix_get(mat2, i, j);
+      current_diff = fabs(matrix_get(mat1, i, j) - matrix_get(mat2, i, j));
+
       if (current_diff > max) {
         max = current_diff;
       }
