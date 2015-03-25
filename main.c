@@ -7,8 +7,8 @@
 
 #define GENERATE_STOP_CRITERION_DATA 1
 #define QUIET_MODE 0
-#define MAX_NUMBER_OF_ITERATIONS 200
-#define TOLERANCE 0.01
+#define MAX_NUMBER_OF_ITERATIONS 1000
+#define TOLERANCE 1e-4f
 
 /* TODO: Read the matrix from a file */
 /* TODO: Add tests for the functions */ 
@@ -58,12 +58,14 @@ int main(int argc, char **argv) {
     if (! QUIET_MODE) {
       printf("Iteration number: %d\n\n", counter);
 
-      print_board("Current Board", current_board);
       print_board("Old Board", old_board);
+      print_board("Current Board", current_board);
 
       printf("   Matrix distance:  %5.20f \n\n", matrix_distance(current_board, old_board));
       printf("   Maximun matrix value:  %5.20f \n\n", matrix_maximun_value(current_board));
+      /*
       printf("   (Matrix_distance / Maximun_matrix_value) --> Stop Criterion:  %5.10f \n\n", (matrix_distance(current_board, old_board) / matrix_maximun_value(current_board)));
+      */
       printf("   TOLERANCE:  %5.10f \n\n", TOLERANCE);
     }
 

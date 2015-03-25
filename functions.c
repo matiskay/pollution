@@ -21,7 +21,10 @@ void write_data_to_file(float data) {
 }
 
 float stop_criterion(Matrix* current_board, Matrix* old_board) {
+  /*
   return matrix_distance(current_board, old_board) / matrix_maximun_value(current_board);
+  */
+  return matrix_distance(current_board, old_board);
 }
 
 /* TODO: Don't consider empty lines */
@@ -127,7 +130,7 @@ float matrix_distance(Matrix* mat1, Matrix* mat2) {
   float max;
   float current_diff;
 
-  max = fabs(matrix_get(mat1, 0, 0) - matrix_get(mat2, 0, 0));
+  max = 0;
 
   for (i = 0; i < mat1->number_of_rows; i++) {
     for (j = 0; j < mat1->number_of_columns; j++) {
@@ -259,7 +262,8 @@ float make_operation(Matrix* matrix_rule, Matrix* mat, int row_index, int column
    * +---+---+---+---+---+---+---+---+---+
    *
    * */
-  if (matrix_get(matrix_rule, row_index, column_index) == 0) {
+  /* TODO: Check if c has automatically casting in test */
+  if ((int) matrix_get(matrix_rule, row_index, column_index) == 0) {
     return 0.0;
   }
 
