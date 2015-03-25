@@ -36,13 +36,46 @@ static char * test_create_initial_board_from_file() {
 
   board = create_initial_board_from_file(filename);
 
+  /*
   print_board("board:  ", board);
   print_board("expected:  ", expected_matrix);
+  */
 
   mu_assert("error, expected_matrix != board_from_file", matrix_equal(board, expected_matrix));
   return 0;
 }
 
+static char * test_create_initial_board_from_file_with_empty_lines() {
+
+  Matrix* board;
+  Matrix* expected_matrix;
+
+  char* filename;
+  filename = "test_island/test_island_empty_lines.txt";
+
+  expected_matrix = matrix_create(2, 2);
+  /*
+  1 2
+  3 4
+  */
+  matrix_set(expected_matrix, 0, 0, 1);
+  matrix_set(expected_matrix, 0, 1, 2);
+
+  matrix_set(expected_matrix, 1, 0, 3);
+  matrix_set(expected_matrix, 1, 1, 4);
+
+  board = create_initial_board_from_file(filename);
+
+  /*
+  print_board("board:  ", board);
+  print_board("expected:  ", expected_matrix);
+  */
+
+  mu_assert("error, expected_matrix != board_from_file", matrix_equal(board, expected_matrix));
+  return 0;
+}
+
+/* TODO: Rename to missing column */
 static char * test_initial_board_missing_matrix_value() {
 
   Matrix* board;
@@ -52,15 +85,17 @@ static char * test_initial_board_missing_matrix_value() {
 
   board = create_initial_board_from_file(filename);
 
+  print_board("board:  ", board);
+
   return 0;
 }
 
-static char * test_initial_board_missing_columns() {
+static char * test_initial_board_missing_number_of_columns() {
 
   Matrix* board;
   char* filename;
 
-  filename = "test_island/test_island_missing_columns.txt";
+  filename = "test_island/test_island_missing_number_of_columns.txt";
 
   board = create_initial_board_from_file(filename);
 
@@ -90,12 +125,15 @@ static char * all_tests() {
 
   mu_run_test(test_create_initial_board_from_file);
 
+  mu_run_test(test_create_initial_board_from_file_with_empty_lines);
+
   /*
   mu_run_test(test_initial_board_missing_matrix_value);
   */
 
+
   /*
-  mu_run_test(test_initial_board_missing_columns);
+  mu_run_test(test_initial_board_missing_number_of_columns);
   */
 
   /*

@@ -26,12 +26,10 @@ int main(int argc, char **argv) {
 
   int i;
   int j;
-  int counter;
   int number_of_iterations;
-  float stop_condition;
+  float error;
 
   number_of_iterations = 0;
-  counter = 0;
   initial_board = create_initial_board_from_file("island/island.txt");
 
   if (! QUIET_MODE) {
@@ -53,41 +51,29 @@ int main(int argc, char **argv) {
       }
     }
 
-    counter++;
-
     number_of_iterations++;
 
-    stop_condition = stop_criterion(current_board, old_board);
+    error = stop_criterion(current_board, old_board);
 
     if (GENERATE_STOP_CRITERION_DATA) {
-      write_data_to_file(stop_condition);
+      write_data_to_file(error);
     }
 
     if (!QUIET_MODE) {
-      printf("Iteration number: %d\n\n", counter);
+      printf("Iteration number: %d\n\n", number_of_iterations);
 
       print_board("Old Board", old_board);
       print_board("Current Board", current_board);
 
-      printf("   Current Error:  %5.20f \n\n", stop_condition);
-      /*
-      printf("   (Matrix_distance / Maximun_matrix_value) --> Stop Criterion:  %5.10f \n\n", (matrix_distance(current_board, old_board) / matrix_maximun_value(current_board)));
-      */
+      printf("   Current Error:  %5.20f \n\n", error);
       printf("   TOLERANCE:  %5.10f \n\n", TOLERANCE);
     }
 
-  } while ((stop_condition >= TOLERANCE) && (number_of_iterations < MAX_NUMBER_OF_ITERATIONS));
+  } while ((error >= TOLERANCE) && (number_of_iterations < MAX_NUMBER_OF_ITERATIONS));
 
   matrix_free(current_board);
   matrix_free(initial_board);
   matrix_free(old_board);
-
-
-  /*
-  printf("The number of lines is %d\n", line_counter);
-  printf("The number of rows is %d\n", number_of_rows);
-  printf("The number of columns is %d\n", number_of_columns);
-  */
 
   return 0;
 }

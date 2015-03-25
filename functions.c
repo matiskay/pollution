@@ -3,9 +3,12 @@
 #include <math.h>
 #include "matrix.h"
 #include "functions.h"
+#include <string.h>
 
 #define DEBUG_INITIAL_BOARD_FUNCTION 1
 #define BUFFER 128
+#define ASCII_CODE_FOR_NEW_LINE 10
+#define ASCII_CODE_FOR_SPACE 32
 
 void write_data_to_file(float data) {
   file_stop_criterion = fopen("stop_criterion.dat", "a");
@@ -55,6 +58,10 @@ Matrix* create_initial_board_from_file(char* filename) {
 
   if (file != NULL) {
     while (fgets(line, sizeof(line), file) != NULL) {
+      if (line[0] == ASCII_CODE_FOR_NEW_LINE) {
+        continue;
+      }
+
       for (i = 0; i < BUFFER; i++) {
 
         if (line[i] == '\0') {
@@ -80,10 +87,15 @@ Matrix* create_initial_board_from_file(char* filename) {
 
         if (number_of_lines == 0) {
           number_of_parameters_returned = sscanf(line, "%d %d", &number_of_rows, &number_of_columns);
+
+          if (number_of_parameters_returned < 2) {
+            printf("You have to specify the number_of_rows and the number_of_columns");
+            exit(10);
+          }
+
           initial_board = matrix_create(number_of_rows, number_of_columns);
         } else {
-          /* Empty Space */
-          if (line[i] != 10 && line[i] !=  32) {
+          if (line[i] != ASCII_CODE_FOR_NEW_LINE && line[i] !=  ASCII_CODE_FOR_SPACE) {
             row_index = number_of_lines - 1;
             column_index = column_index % number_of_columns;
 
@@ -97,9 +109,21 @@ Matrix* create_initial_board_from_file(char* filename) {
 
             matrix_set(initial_board, row_index, column_index, (int) (line[i] - ASCII_CODE_FOR_ZERO));
             column_index++;
+          } else if (line[i] == 10) {
+            if (column_index % number_of_columns != 0) {
+              printf("There is a missing value in the columns \n");
+              matrix_free(initial_board);
+              exit(88);
+            }
           }
         }
       }
+    }
+
+    if (number_of_lines != number_of_rows + 1) {
+      printf("There is a missing row in the file \n");
+      matrix_free(initial_board);
+      exit(77);
     }
 
     if (DEBUG_INITIAL_BOARD_FUNCTION) {

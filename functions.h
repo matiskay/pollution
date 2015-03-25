@@ -30,3 +30,5 @@ float stop_condition;
 Matrix* create_initial_board_from_file(char*);
 
 FILE* file_stop_criterion;
+
+int is_empty_line(const char *);
