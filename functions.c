@@ -4,6 +4,8 @@
 #include "matrix.h"
 #include "functions.h"
 
+#define DEBUG_INITIAL_BOARD_FUNCTION 1
+
 void write_data_to_file(float data) {
   file_stop_criterion = fopen("stop_criterion.dat", "a");
 
@@ -28,27 +30,30 @@ Matrix* create_initial_board_from_file(char* filename) {
   char current_character;
   char line[BUFFER];
   int i;
-  int line_counter = 0;
+
+  /* Number of valid lines excluding lines that starts with # */
+  int number_of_lines;
   int is_comment;
 
   int number_of_rows;
   int number_of_columns;
-  int columns_counter;
+  int row_index;
+  int column_index;
   int number_of_parameters_returned;
 
-
   FILE *file = fopen(filename, "r");
+
   is_comment = 0;
-  columns_counter = 0;
+
+  column_index = 0;
+
+  number_of_lines = 0;
 
   if (file != NULL) {
     while (fgets(line, sizeof(line), file) != NULL) {
       for (i = 0; i < BUFFER; i++) {
-        if (line[i] == '\0') {
 
-          /*
-          printf("Breaking... \n");
-          */
+        if (line[i] == '\0') {
           break;
         }
 
@@ -62,57 +67,41 @@ Matrix* create_initial_board_from_file(char* filename) {
             is_comment = 0;
             continue;
           }
-          line_counter++;
+          number_of_lines++;
         }
 
         if (is_comment == 1) {
           continue;
         }
 
-        if (line_counter == 0) {
+        if (number_of_lines == 0) {
           number_of_parameters_returned = sscanf(line, "%d %d", &number_of_rows, &number_of_columns);
-
-          if (number_of_parameters_returned != 2) {
-            exit(10);
-          }
-
           initial_board = matrix_create(number_of_rows, number_of_columns);
-        }
+        } else {
+          /* Empty Space */
+          if (line[i] != 10 && line[i] !=  32) {
+            row_index = number_of_lines - 1;
+            column_index = column_index % number_of_columns;
 
-      /*
-        printf("%c", line[i]);
-        */
-        /* Add checking error when the information is bigger that the information provided */
-        if (line_counter > 0) {
-          /* Store using line counter*/
-          /* Empty line '' */
-          if (line[i] != 10) {
-              matrix_set(initial_board, line_counter - 1, columns_counter, (int) (line[i] - ASCII_CODE_FOR_ZERO));
-              columns_counter++;
-          }
-
-          if (line[i] == END_OF_LINE) {
-            if (line_counter - 1 != 0) {
-              if (columns_counter - 2 < number_of_columns - 1) {
-                exit(90);
-              }
+            if (DEBUG_INITIAL_BOARD_FUNCTION) {
+              printf("row_index:   %d\n", row_index);
+              printf("column_index:   %d\n", column_index);
+              printf("current_value (character):   %c\n", line[i]);
+              printf("current_value (integer):   %d\n", line[i]);
+              printf("--------------------------------\n");
             }
-            columns_counter = 0;
+
+            matrix_set(initial_board, row_index, column_index, (int) (line[i] - ASCII_CODE_FOR_ZERO));
+            column_index++;
           }
         }
-        /*
-        printf("character index(%d): %d \n", i, line[i]);
-        printf("---> character index(%d): %c \n", i, line[i]);
-        */
       }
-      /*
-      printf("---- end of line ----\n");
-      */
     }
 
-    /* One missing row is missing */
-    if (line_counter - 1 < number_of_rows) {
-      exit(77);
+    if (DEBUG_INITIAL_BOARD_FUNCTION) {
+      printf("Number of valid lines in the file:  %d\n", number_of_lines);
+      printf("Number of rows:  %d\n", number_of_rows);
+      printf("Number of columns:  %d\n", number_of_columns);
     }
 
     fclose(file);

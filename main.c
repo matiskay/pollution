@@ -7,7 +7,7 @@
 
 #define GENERATE_STOP_CRITERION_DATA 1
 #define QUIET_MODE 0
-#define MAX_NUMBER_OF_ITERATIONS 1
+#define MAX_NUMBER_OF_ITERATIONS 200
 #define TOLERANCE 0.01
 
 /* TODO: Read the matrix from a file */
