@@ -1,6 +1,5 @@
 #define BOMB_MARK 2
 #define POLLUTION_MARK 100
-#define BUFFER 128
 #define ASCII_CODE_FOR_ZERO 48
 #define END_OF_LINE '\n'
 

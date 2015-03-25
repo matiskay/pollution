@@ -1,3 +1,4 @@
+
 float matrix_distance(Matrix*, Matrix*);
 
 float matrix_maximun_value(Matrix*);

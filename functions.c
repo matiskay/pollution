@@ -5,6 +5,7 @@
 #include "functions.h"
 
 #define DEBUG_INITIAL_BOARD_FUNCTION 1
+#define BUFFER 128
 
 void write_data_to_file(float data) {
   file_stop_criterion = fopen("stop_criterion.dat", "a");
