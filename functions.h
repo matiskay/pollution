@@ -8,7 +8,7 @@ Matrix* create_initial_board(void);
 
 void copy_board(Matrix*, Matrix*);
 
-float stop_criterion(Matrix*, Matrix*);
+float get_error(Matrix*, Matrix*);
 
 float make_operation(Matrix*, Matrix*, int, int);
 

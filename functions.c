@@ -23,7 +23,7 @@ void write_data_to_file(float data) {
   fclose(file_stop_criterion);
 }
 
-float stop_criterion(Matrix* current_board, Matrix* old_board) {
+float get_error(Matrix* current_board, Matrix* old_board) {
   return matrix_distance(current_board, old_board);
 }
 

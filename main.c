@@ -54,7 +54,7 @@ int main(int argc, char **argv) {
 
     number_of_iterations++;
 
-    error = stop_criterion(current_board, old_board);
+    error = get_error(current_board, old_board);
 
     if (GENERATE_STOP_CRITERION_DATA) {
       write_data_to_file(error);
