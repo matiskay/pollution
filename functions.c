@@ -130,7 +130,7 @@ Matrix* create_initial_board_from_file(char* filename) {
 
     fclose(file);
   } else {
-    printf("It's not possible to open the filename: %s", filename);
+    printf("It's not possible to open the filename: %s\n", filename);
     perror(filename);
     exit(1);
   }

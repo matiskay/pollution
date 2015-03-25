@@ -1,6 +1,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <math.h>
+#include <string.h>
 #include "matrix.h"
 
 #include "functions.h"
@@ -9,6 +10,8 @@
 #define QUIET_MODE 0
 #define MAX_NUMBER_OF_ITERATIONS 1000
 #define TOLERANCE 1e-4f
+#define ENABLE_UI 0
+#define DEFAULT_ISLAND_FILE "island/island.txt"
 
 /* TODO: Read the matrix from a file */
 /* TODO: Add tests for the functions */ 
@@ -18,6 +21,7 @@
 
 /* Add function signatures here */
 
+/* USAGE: island/island.txt */
 int main(int argc, char **argv) {
 
   Matrix* initial_board;
@@ -28,10 +32,26 @@ int main(int argc, char **argv) {
   int j;
   int number_of_iterations;
   float error;
+  int character;
+  char path_to_file[121];
+
+  if (ENABLE_UI) {
+    printf("Insert the name of the file:   ");
+    scanf("%s", path_to_file);
+  } else {
+    strcpy(path_to_file, DEFAULT_ISLAND_FILE);
+  }
+
+
+  /*
+  while ((character = getchar()) != EOF) {
+    printf("%c", character);
+  }
+  */
 
   number_of_iterations = 0;
   /* TODO: The user should pass the name of the file */
-  initial_board = create_initial_board_from_file("island/island.txt");
+  initial_board = create_initial_board_from_file(path_to_file);
 
   if (! QUIET_MODE) {
     print_board("Initial board", initial_board);
@@ -76,6 +96,7 @@ int main(int argc, char **argv) {
 
   } while ((error >= TOLERANCE) && (number_of_iterations < MAX_NUMBER_OF_ITERATIONS));
 
+  printf("name of the file:   %s\n", path_to_file);
 
   matrix_free(current_board);
   matrix_free(initial_board);
