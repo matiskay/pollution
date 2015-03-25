@@ -1,11 +1,18 @@
 # Pollution problem
 
+## Explantion of the solution of the problem
+I created the Matrix Abstract Data Type (matrix.h and matrix.c) and created a set of helper functions to deal with the file reading
+and the constrained detailed in the problem description (project-description/Trabalho1.pdf) (functions.h and functions.c). The default 
+island file is located in island/island.txt
+
+If you want to enable the UI you have to set the variable macro (constant) "ENABLE_UI" to 1.
+
+## How to compile
+make run
+
 ## Author information
 * Name: Edgar Marca
 * Email: matiskay@gmail.com
 * Course: Ciencia da Computaçao: Estruturas de Dados e Aplicaçoes
 * Proffesor: Jauvane C. Oliveira
 * Class code: GA-024
-
-## How to compile
-make run
