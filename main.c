@@ -55,20 +55,6 @@ int main(int argc, char **argv) {
 
     counter++;
 
-    if (! QUIET_MODE) {
-      printf("Iteration number: %d\n\n", counter);
-
-      print_board("Old Board", old_board);
-      print_board("Current Board", current_board);
-
-      printf("   Matrix distance:  %5.20f \n\n", matrix_distance(current_board, old_board));
-      printf("   Maximun matrix value:  %5.20f \n\n", matrix_maximun_value(current_board));
-      /*
-      printf("   (Matrix_distance / Maximun_matrix_value) --> Stop Criterion:  %5.10f \n\n", (matrix_distance(current_board, old_board) / matrix_maximun_value(current_board)));
-      */
-      printf("   TOLERANCE:  %5.10f \n\n", TOLERANCE);
-    }
-
     number_of_iterations++;
 
     stop_condition = stop_criterion(current_board, old_board);
@@ -76,6 +62,20 @@ int main(int argc, char **argv) {
     if (GENERATE_STOP_CRITERION_DATA) {
       write_data_to_file(stop_condition);
     }
+
+    if (!QUIET_MODE) {
+      printf("Iteration number: %d\n\n", counter);
+
+      print_board("Old Board", old_board);
+      print_board("Current Board", current_board);
+
+      printf("   Current Error:  %5.20f \n\n", stop_condition);
+      /*
+      printf("   (Matrix_distance / Maximun_matrix_value) --> Stop Criterion:  %5.10f \n\n", (matrix_distance(current_board, old_board) / matrix_maximun_value(current_board)));
+      */
+      printf("   TOLERANCE:  %5.10f \n\n", TOLERANCE);
+    }
+
   } while ((stop_condition >= TOLERANCE) && (number_of_iterations < MAX_NUMBER_OF_ITERATIONS));
 
   matrix_free(current_board);
