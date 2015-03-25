@@ -31,3 +31,4 @@ void matrix_display(Matrix* mat);
 void matrix_display_integers(Matrix* mat);
 
 int matrix_equal(Matrix* mat1, Matrix* mat2);
+

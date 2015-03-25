@@ -30,6 +30,7 @@ int main(int argc, char **argv) {
   float error;
 
   number_of_iterations = 0;
+  /* TODO: The user should pass the name of the file */
   initial_board = create_initial_board_from_file("island/island.txt");
 
   if (! QUIET_MODE) {
@@ -69,7 +70,12 @@ int main(int argc, char **argv) {
       printf("   TOLERANCE:  %5.10f \n\n", TOLERANCE);
     }
 
+    if (number_of_iterations + 1 >= MAX_NUMBER_OF_ITERATIONS) {
+      printf("The maximun number of iterations has been reached. \n");
+    }
+
   } while ((error >= TOLERANCE) && (number_of_iterations < MAX_NUMBER_OF_ITERATIONS));
+
 
   matrix_free(current_board);
   matrix_free(initial_board);
