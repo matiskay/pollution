@@ -288,6 +288,11 @@ float make_operation(Matrix* matrix_rule, Matrix* mat, int row_index, int column
     return 0.0;
   }
 
+  /* 100 never changes */
+  if ((int) matrix_get(matrix_rule, row_index, column_index) == 2) {
+    return 100.0;
+  }
+
   return (left(mat, row_index, column_index)
       + top(mat, row_index, column_index)
       + right(mat, row_index, column_index)
