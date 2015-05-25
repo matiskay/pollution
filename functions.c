@@ -24,7 +24,7 @@ void write_data_to_file(float data) {
 }
 
 float get_error(Matrix* current_board, Matrix* old_board) {
-  return matrix_distance(current_board, old_board);
+  return matrix_distance(current_board, old_board) / matrix_maximun_value(current_board);
 }
 
 Matrix* create_initial_board_from_file(char* filename) {
